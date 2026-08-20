@@ -1,0 +1,70 @@
+id = "herdr-nvim-aware"
+name = "Nvim Aware"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Nvim-aware keybindings: navigation, splits, close, and zoom pass keys to Neovim when it owns the pane"
+platforms = ["macos", "linux"]
+
+[[build]]
+command = ["cc", "-O2", "-o", "herdr-nvim-aware", "herdr-nvim-aware.c"]
+platforms = ["macos", "linux"]
+
+[[actions]]
+id = "left"
+title = "Navigate left"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "left"]
+
+[[actions]]
+id = "down"
+title = "Navigate down"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "down"]
+
+[[actions]]
+id = "up"
+title = "Navigate up"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "up"]
+
+[[actions]]
+id = "right"
+title = "Navigate right"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "right"]
+
+[[actions]]
+id = "split_v"
+title = "Split vertical (or nvim vsplit)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "split_v"]
+
+[[actions]]
+id = "split_h"
+title = "Split horizontal (or nvim hsplit)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "split_h"]
+
+[[actions]]
+id = "close"
+title = "Close pane (or nvim close split)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "close"]
+
+[[actions]]
+id = "quit"
+title = "Quit pane (or nvim quit)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "quit"]
+
+[[actions]]
+id = "zoom"
+title = "Zoom toggle (or nvim zoom)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "zoom"]
+
+[[actions]]
+id = "scroll_up"
+title = "Scroll up (or nvim C-u)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "scroll_up"]
