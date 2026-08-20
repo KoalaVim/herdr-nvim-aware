@@ -145,7 +145,7 @@ static const struct action actions[] = {
     {"close",     "alt+w",  "pane.close",           "\"pane_id\":\"%s\"", NULL},
     {"quit",      "alt+q",  "pane.close",           "\"pane_id\":\"%s\"", NULL},
     {"zoom",      "alt+z",  "pane.zoom",            "\"pane_id\":\"%s\",\"mode\":\"toggle\"", NULL},
-    {"extrakto",  "ctrl+shift+space", NULL, NULL, "herdr plugin pane open --plugin extrakto-herdr --entrypoint picker --env EXTRAKTO_TRIGGER_PANE=%s"},
+    {"extrakto",  "ctrl+space", NULL, NULL, "herdr plugin pane open --plugin extrakto-herdr --entrypoint picker --env EXTRAKTO_TRIGGER_PANE=%s"},
     {NULL, NULL, NULL, NULL, NULL}
 };
 
