@@ -63,8 +63,3 @@ title = "Zoom toggle (or nvim zoom)"
 contexts = ["global"]
 command = ["./herdr-nvim-aware", "zoom"]
 
-[[actions]]
-id = "scroll_up"
-title = "Scroll up (or nvim C-u)"
-contexts = ["global"]
-command = ["./herdr-nvim-aware", "scroll_up"]

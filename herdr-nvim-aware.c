@@ -144,7 +144,6 @@ static const struct action actions[] = {
     {"close",     "alt+w",  "pane.close",           "\"pane_id\":\"%s\""},
     {"quit",      "alt+q",  "pane.close",           "\"pane_id\":\"%s\""},
     {"zoom",      "alt+z",  "pane.zoom",            "\"pane_id\":\"%s\",\"mode\":\"toggle\""},
-    {"scroll_up", "ctrl+u", "pane.send_keys",       "\"pane_id\":\"%s\",\"keys\":[\"ctrl+u\"]"},
     {NULL, NULL, NULL, NULL}
 };
 
