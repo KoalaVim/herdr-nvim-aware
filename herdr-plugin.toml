@@ -63,3 +63,9 @@ title = "Zoom toggle (or nvim zoom)"
 contexts = ["global"]
 command = ["./herdr-nvim-aware", "zoom"]
 
+[[actions]]
+id = "extrakto"
+title = "Extrakto (or nvim ctrl+shift+space)"
+contexts = ["global"]
+command = ["./herdr-nvim-aware", "extrakto"]
+

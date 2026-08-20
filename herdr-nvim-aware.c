@@ -130,21 +130,23 @@ static int herdr_request(const char *json) {
 struct action {
     const char *name;
     const char *nvim_key;     /* key to send to nvim */
-    const char *herdr_method; /* method when nvim is NOT running */
+    const char *herdr_method; /* method when nvim is NOT running (NULL = shell_cmd) */
     const char *herdr_params; /* params format (with %s for pane_id where needed) */
+    const char *shell_cmd;    /* shell command fallback when herdr_method is NULL (%s = pane_id) */
 };
 
 static const struct action actions[] = {
-    {"left",      "ctrl+h", "pane.focus_direction", "\"direction\":\"left\",\"pane_id\":\"%s\""},
-    {"down",      "ctrl+j", "pane.focus_direction", "\"direction\":\"down\",\"pane_id\":\"%s\""},
-    {"up",        "ctrl+k", "pane.focus_direction", "\"direction\":\"up\",\"pane_id\":\"%s\""},
-    {"right",     "ctrl+l", "pane.focus_direction", "\"direction\":\"right\",\"pane_id\":\"%s\""},
-    {"split_v",   "alt+e",  "pane.split",           "\"direction\":\"right\",\"pane_id\":\"%s\",\"focus\":true"},
-    {"split_h",   "alt+o",  "pane.split",           "\"direction\":\"down\",\"pane_id\":\"%s\",\"focus\":true"},
-    {"close",     "alt+w",  "pane.close",           "\"pane_id\":\"%s\""},
-    {"quit",      "alt+q",  "pane.close",           "\"pane_id\":\"%s\""},
-    {"zoom",      "alt+z",  "pane.zoom",            "\"pane_id\":\"%s\",\"mode\":\"toggle\""},
-    {NULL, NULL, NULL, NULL}
+    {"left",      "ctrl+h", "pane.focus_direction", "\"direction\":\"left\",\"pane_id\":\"%s\"", NULL},
+    {"down",      "ctrl+j", "pane.focus_direction", "\"direction\":\"down\",\"pane_id\":\"%s\"", NULL},
+    {"up",        "ctrl+k", "pane.focus_direction", "\"direction\":\"up\",\"pane_id\":\"%s\"", NULL},
+    {"right",     "ctrl+l", "pane.focus_direction", "\"direction\":\"right\",\"pane_id\":\"%s\"", NULL},
+    {"split_v",   "alt+e",  "pane.split",           "\"direction\":\"right\",\"pane_id\":\"%s\",\"focus\":true", NULL},
+    {"split_h",   "alt+o",  "pane.split",           "\"direction\":\"down\",\"pane_id\":\"%s\",\"focus\":true", NULL},
+    {"close",     "alt+w",  "pane.close",           "\"pane_id\":\"%s\"", NULL},
+    {"quit",      "alt+q",  "pane.close",           "\"pane_id\":\"%s\"", NULL},
+    {"zoom",      "alt+z",  "pane.zoom",            "\"pane_id\":\"%s\",\"mode\":\"toggle\"", NULL},
+    {"extrakto",  "ctrl+shift+space", NULL, NULL, "herdr plugin pane open --plugin extrakto-herdr --entrypoint picker --env EXTRAKTO_TRIGGER_PANE=%s"},
+    {NULL, NULL, NULL, NULL, NULL}
 };
 
 int main(int argc, char **argv) {
@@ -176,6 +178,12 @@ int main(int argc, char **argv) {
                  "{\"id\":\"nvim-aware\",\"method\":\"pane.send_keys\","
                  "\"params\":{\"pane_id\":\"%s\",\"keys\":[\"%s\"]}}\n",
                  pane, act->nvim_key);
+    } else if (act->shell_cmd) {
+        char cmd[PATH_BUF];
+        snprintf(cmd, sizeof cmd, act->shell_cmd, pane);
+        execl("/bin/sh", "sh", "-c", cmd, (char *)NULL);
+        perror("herdr-nvim-aware: exec");
+        return 1;
     } else if (*pane) {
         char params[256];
         snprintf(params, sizeof params, act->herdr_params, pane);
@@ -185,7 +193,7 @@ int main(int argc, char **argv) {
                  act->herdr_method, params);
     } else {
         /* No pane ID -- build params without pane_id for focus_direction */
-        if (strcmp(act->herdr_method, "pane.focus_direction") == 0) {
+        if (act->herdr_method && strcmp(act->herdr_method, "pane.focus_direction") == 0) {
             snprintf(json, sizeof json,
                      "{\"id\":\"nvim-aware\",\"method\":\"pane.focus_direction\","
                      "\"params\":{\"direction\":\"%s\"}}\n",
