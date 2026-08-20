@@ -1,1 +1,5 @@
 herdr-nvim-aware
+/target
+/bin
+/.crates.toml
+/.crates2.json
